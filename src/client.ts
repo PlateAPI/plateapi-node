@@ -11,6 +11,10 @@ import type {
   LookupResult,
   Usage,
   HealthStatus,
+  LogEntry,
+  LogsResult,
+  LogsOptions,
+  RotateResult,
   PlateAPIOptions,
 } from "./types";
 
@@ -243,6 +247,49 @@ export class PlateAPI {
       period_start: (body.period_start as string) ?? null,
       period_end: (body.period_end as string) ?? null,
       topup_credits: (body.topup_credits as number) ?? 0,
+    };
+  }
+
+  async logs(options: LogsOptions = {}): Promise<LogsResult> {
+    const params: Record<string, string> = {
+      limit: String(options.limit ?? 100),
+      offset: String(options.offset ?? 0),
+    };
+    if (options.since) params.since = options.since;
+    if (options.until) params.until = options.until;
+    if (options.plate) params.plate = options.plate;
+    if (options.success !== undefined) params.success = String(options.success);
+
+    const response = await this.request("GET", "/api/v1/keys/logs", params);
+    const body = (await response.json()) as Record<string, unknown>;
+    const rawLogs = (body.logs as Record<string, unknown>[]) ?? [];
+
+    return {
+      logs: rawLogs.map((entry) => ({
+        plate: (entry.plate as string) ?? null,
+        state: (entry.state as string) ?? null,
+        success: (entry.success as number) ?? 0,
+        error: (entry.error as string) ?? null,
+        duration_ms: (entry.duration_ms as number) ?? null,
+        make: (entry.make as string) ?? null,
+        model: (entry.model as string) ?? null,
+        year: (entry.year as number) ?? null,
+        client_ip: (entry.client_ip as string) ?? null,
+        created_at: (entry.created_at as string) ?? null,
+      })),
+      count: (body.count as number) ?? 0,
+      total: (body.total as number) ?? 0,
+      limit: (body.limit as number) ?? 100,
+      offset: (body.offset as number) ?? 0,
+    };
+  }
+
+  async rotate(): Promise<RotateResult> {
+    const response = await this.request("POST", "/api/v1/keys/rotate");
+    const body = (await response.json()) as Record<string, unknown>;
+    return {
+      new_key: (body.new_key as string) ?? null,
+      email: (body.email as string) ?? null,
     };
   }
 

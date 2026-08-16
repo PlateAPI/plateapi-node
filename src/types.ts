@@ -45,6 +45,41 @@ export interface HealthStatus {
   version: string | null;
 }
 
+export interface LogEntry {
+  plate: string | null;
+  state: string | null;
+  success: number;
+  error: string | null;
+  duration_ms: number | null;
+  make: string | null;
+  model: string | null;
+  year: number | null;
+  client_ip: string | null;
+  created_at: string | null;
+}
+
+export interface LogsResult {
+  logs: LogEntry[];
+  count: number;
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface LogsOptions {
+  limit?: number;
+  offset?: number;
+  since?: string;
+  until?: string;
+  plate?: string;
+  success?: boolean;
+}
+
+export interface RotateResult {
+  new_key: string | null;
+  email: string | null;
+}
+
 export interface PlateAPIOptions {
   base_url?: string;
   timeout?: number;

@@ -13,5 +13,9 @@ export type {
   RateLimit,
   Usage,
   HealthStatus,
+  LogEntry,
+  LogsResult,
+  LogsOptions,
+  RotateResult,
   PlateAPIOptions,
 } from "./types";
