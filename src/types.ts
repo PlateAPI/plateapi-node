@@ -27,6 +27,7 @@ export interface LookupResult {
   sandbox: boolean;
   code?: string | null;
   error?: string | null;
+  request_id: string | null;
   rate_limit: RateLimit;
 }
 
@@ -55,6 +56,7 @@ export interface LogEntry {
   model: string | null;
   year: number | null;
   client_ip: string | null;
+  request_id: string | null;
   created_at: string | null;
 }
 

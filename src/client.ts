@@ -213,6 +213,7 @@ export class PlateAPI {
       sandbox: (body.sandbox as boolean) ?? false,
       code: (body.code as string) ?? null,
       error: (body.error as string) ?? null,
+      request_id: (body.request_id as string) ?? null,
       rate_limit: rateLimit,
     };
   }
@@ -274,6 +275,7 @@ export class PlateAPI {
         model: (entry.model as string) ?? null,
         year: (entry.year as number) ?? null,
         client_ip: (entry.client_ip as string) ?? null,
+        request_id: (entry.request_id as string) ?? null,
         created_at: (entry.created_at as string) ?? null,
       })),
       count: (body.count as number) ?? 0,
