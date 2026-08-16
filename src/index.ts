@@ -10,6 +10,8 @@ export {
 export type {
   Vehicle,
   LookupResult,
+  VehiclesResult,
+  VehiclesOptions,
   RateLimit,
   Usage,
   HealthStatus,

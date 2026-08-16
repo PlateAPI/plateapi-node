@@ -31,13 +31,37 @@ export interface LookupResult {
   rate_limit: RateLimit;
 }
 
+export interface VehiclesResult {
+  success: boolean;
+  type: string | null;
+  data: string[];
+  total: number;
+  duration_ms: number | null;
+}
+
+export interface VehiclesOptions {
+  make?: string;
+  model?: string;
+  year?: number;
+  series?: string;
+  engine?: string;
+  variant?: string;
+}
+
 export interface Usage {
-  used: number;
-  limit: number;
-  remaining: number;
+  email: string | null;
   plan: string | null;
+  monthly_limit: number;
+  used_this_month: number;
+  remaining: number;
+  percent_used: number | null;
+  rate_limit_per_min: number;
+  last_lookup_at: string | null;
   period_start: string | null;
   period_end: string | null;
+  days_remaining: number | null;
+  cancel_at_period_end: boolean;
+  cancel_at: string | null;
   topup_credits: number;
 }
 

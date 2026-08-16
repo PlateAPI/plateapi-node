@@ -82,33 +82,74 @@ if (result.alternatives.length > 0) {
 
 ## Vehicle database
 
-Browse the full vehicle database (32,000+ vehicles, 213 makes). Each call narrows the cascade -- call with no arguments to get all makes, then pass `make` to get models, and so on. Paid plans only, no quota consumed.
+Browse the full vehicle database (32,000+ vehicles, 213 makes). Each call narrows the cascade -- call with no arguments to get all makes, then pass `make` to get models, and so on through all 7 levels. Paid plans only, no quota consumed.
+
+Returns a `VehiclesResult` with `success`, `type` (the cascade level), `data` (array of values), `total`, and `duration_ms`.
 
 ```typescript
-// All makes
+// Step 1: All makes
 const makes = await client.vehicles();
-console.log(makes.slice(0, 5)); // ["ABARTH", "AC", "ALFA ROMEO", ...]
+console.log(makes.type);     // "make"
+console.log(makes.data.slice(0, 5)); // ["ABARTH", "AC", "ALFA ROMEO", ...]
+console.log(makes.total);    // 213
 
-// Models for a make
+// Step 2: Models for a make
 const models = await client.vehicles({ make: "TOYOTA" });
+console.log(models.type);    // "model"
+console.log(models.data.slice(0, 5)); // ["86", "ALPHARD", "AURION", ...]
 
-// Years for a make + model
+// Step 3: Years for a make + model
 const years = await client.vehicles({ make: "TOYOTA", model: "HILUX" });
+console.log(years.type);     // "year"
+console.log(years.data.slice(0, 5)); // [2025, 2024, 2023, ...]
 
-// Full cascade with series and engine
+// Step 4: Series for a make + model + year
 const series = await client.vehicles({ make: "TOYOTA", model: "HILUX", year: 2020 });
+console.log(series.type);    // "series"
+console.log(series.data);    // ["SR", "SR5", "Rogue", "Rugged", ...]
+
+// Step 5: Engines for a make + model + year + series
 const engines = await client.vehicles({ make: "TOYOTA", model: "HILUX", year: 2020, series: "SR5" });
+console.log(engines.type);   // "engine"
+console.log(engines.data);   // ["2.8L", "2.4L", ...]
+
+// Step 6: Variants for a make + model + year + series + engine
+const variants = await client.vehicles({
+  make: "TOYOTA", model: "HILUX", year: 2020, series: "SR5", engine: "2.8L",
+});
+console.log(variants.type);  // "variant"
+console.log(variants.data);  // ["4x4 Double Cab", "4x4 Extra Cab", ...]
+
+// Step 7: Full vehicle details
+const vehicles = await client.vehicles({
+  make: "TOYOTA", model: "HILUX", year: 2020, series: "SR5",
+  engine: "2.8L", variant: "4x4 Double Cab",
+});
+console.log(vehicles.type);  // "vehicle"
+console.log(vehicles.data);  // [{make: "TOYOTA", model: "HILUX", ...}]
+```
+
+For vehicles without a series code, pass an empty string:
+
+```typescript
+const result = await client.vehicles({ make: "TOYOTA", model: "HILUX", year: 2020, series: "" });
 ```
 
 ## Check usage
 
 ```typescript
 const usage = await client.usage();
-console.log(`${usage.used}/${usage.limit} lookups used`);
+console.log(`${usage.used_this_month}/${usage.monthly_limit} lookups used`);
 console.log(`${usage.remaining} remaining`);
+console.log(`${usage.percent_used}% used`);
 console.log(`Plan: ${usage.plan}`);
+console.log(`Rate limit: ${usage.rate_limit_per_min}/min`);
 console.log(`Period: ${usage.period_start} to ${usage.period_end}`);
+console.log(`Days remaining: ${usage.days_remaining}`);
+console.log(`Last lookup: ${usage.last_lookup_at}`);
 console.log(`Top-up credits: ${usage.topup_credits}`);
+console.log(`Cancel at period end: ${usage.cancel_at_period_end}`);
+console.log(`Cancel at: ${usage.cancel_at}`);
 ```
 
 ## Request logs
@@ -254,6 +295,8 @@ All types are exported for use in your own code:
 import type {
   Vehicle,
   LookupResult,
+  VehiclesResult,
+  VehiclesOptions,
   RateLimit,
   Usage,
   HealthStatus,

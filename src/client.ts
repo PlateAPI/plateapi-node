@@ -9,6 +9,8 @@ import type {
   Vehicle,
   RateLimit,
   LookupResult,
+  VehiclesResult,
+  VehiclesOptions,
   Usage,
   HealthStatus,
   LogEntry,
@@ -218,34 +220,46 @@ export class PlateAPI {
     };
   }
 
-  async vehicles(options: {
-    make?: string;
-    model?: string;
-    year?: number;
-    series?: string;
-    engine?: string;
-  } = {}): Promise<string[]> {
+  async vehicles(options: VehiclesOptions = {}): Promise<VehiclesResult> {
     const params: Record<string, string> = {};
-    if (options.make) params.make = options.make;
-    if (options.model) params.model = options.model;
-    if (options.year) params.year = String(options.year);
-    if (options.series) params.series = options.series;
-    if (options.engine) params.engine = options.engine;
+    if (options.make !== undefined) params.make = options.make;
+    if (options.model !== undefined) params.model = options.model;
+    if (options.year !== undefined) params.year = String(options.year);
+    if (options.series !== undefined) params.series = options.series;
+    if (options.engine !== undefined) params.engine = options.engine;
+    if (options.variant !== undefined) params.variant = options.variant;
 
     const response = await this.request("GET", "/api/v1/vehicles", params);
-    return (await response.json()) as string[];
+    const body = (await response.json()) as Record<string, unknown>;
+    const dataList = (body.data as Record<string, unknown>[]) ?? [];
+    const items = dataList.length > 0 ? (dataList[0].data as string[]) ?? [] : [];
+    const cascadeType = dataList.length > 0 ? (dataList[0].type as string) ?? null : null;
+    return {
+      success: (body.success as boolean) ?? false,
+      type: cascadeType,
+      data: items,
+      total: (body.total as number) ?? 0,
+      duration_ms: (body.duration_ms as number) ?? null,
+    };
   }
 
   async usage(): Promise<Usage> {
     const response = await this.request("GET", "/api/v1/keys/usage");
     const body = (await response.json()) as Record<string, unknown>;
     return {
-      used: (body.used as number) ?? 0,
-      limit: (body.limit as number) ?? 0,
-      remaining: (body.remaining as number) ?? 0,
+      email: (body.email as string) ?? null,
       plan: (body.plan as string) ?? null,
+      monthly_limit: (body.monthly_limit as number) ?? 0,
+      used_this_month: (body.used_this_month as number) ?? 0,
+      remaining: (body.remaining as number) ?? 0,
+      percent_used: (body.percent_used as number) ?? null,
+      rate_limit_per_min: (body.rate_limit_per_min as number) ?? 0,
+      last_lookup_at: (body.last_lookup_at as string) ?? null,
       period_start: (body.period_start as string) ?? null,
       period_end: (body.period_end as string) ?? null,
+      days_remaining: (body.days_remaining as number) ?? null,
+      cancel_at_period_end: (body.cancel_at_period_end as boolean) ?? false,
+      cancel_at: (body.cancel_at as string) ?? null,
       topup_credits: (body.topup_credits as number) ?? 0,
     };
   }
