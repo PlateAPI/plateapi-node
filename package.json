@@ -1,5 +1,5 @@
 {
-  "name": "plateapi",
+  "name": "plateapi-sdk",
   "version": "0.1.0",
   "description": "Node.js/TypeScript SDK for PlateAPI -- Australian vehicle registration plate lookup",
   "main": "dist/index.js",

@@ -5,7 +5,7 @@ TypeScript/JavaScript SDK for [PlateAPI](https://plateapi.com.au) -- Australian 
 ## Install
 
 ```bash
-npm install plateapi
+npm install plateapi-sdk
 ```
 
 Requires Node.js 18+. Full TypeScript type definitions included.
@@ -13,7 +13,7 @@ Requires Node.js 18+. Full TypeScript type definitions included.
 ## Quick start
 
 ```typescript
-import { PlateAPI } from "plateapi";
+import { PlateAPI } from "plateapi-sdk";
 
 const client = new PlateAPI("pk_live_your_api_key");
 
@@ -28,7 +28,7 @@ if (result.success) {
 ### CommonJS
 
 ```javascript
-const { PlateAPI } = require("plateapi");
+const { PlateAPI } = require("plateapi-sdk");
 
 const client = new PlateAPI("pk_live_your_api_key");
 ```
@@ -226,7 +226,7 @@ import {
   RateLimitError,
   QuotaExceededError,
   ServerError,
-} from "plateapi";
+} from "plateapi-sdk";
 
 const client = new PlateAPI("pk_live_your_api_key");
 
@@ -304,7 +304,7 @@ import type {
   LogsResult,
   LogsOptions,
   PlateAPIOptions,
-} from "plateapi";
+} from "plateapi-sdk";
 ```
 
 ## Links
