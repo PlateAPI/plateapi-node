@@ -149,19 +149,6 @@ const page2 = await client.logs({ limit: 50, offset: 50 });
 
 Each `LogEntry` contains: `plate`, `state`, `success` (1 or 0), `error`, `duration_ms`, `make`, `model`, `year`, `client_ip`, `created_at`.
 
-## Rotate API key
-
-Immediately invalidates your current key and returns a new one. Update your configuration with the new key before making further requests.
-
-```typescript
-const result = await client.rotate();
-const newKey = result.new_key;
-console.log(`New key: ${newKey}`);
-
-// Create a new client with the new key
-const newClient = new PlateAPI(newKey);
-```
-
 ## Health check
 
 Check API availability. No authentication required, no quota consumed.
@@ -272,7 +259,6 @@ import type {
   LogEntry,
   LogsResult,
   LogsOptions,
-  RotateResult,
   PlateAPIOptions,
 } from "plateapi";
 ```

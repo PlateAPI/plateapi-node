@@ -16,6 +16,5 @@ export type {
   LogEntry,
   LogsResult,
   LogsOptions,
-  RotateResult,
   PlateAPIOptions,
 } from "./types";

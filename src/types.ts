@@ -75,11 +75,6 @@ export interface LogsOptions {
   success?: boolean;
 }
 
-export interface RotateResult {
-  new_key: string | null;
-  email: string | null;
-}
-
 export interface PlateAPIOptions {
   base_url?: string;
   timeout?: number;

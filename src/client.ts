@@ -14,7 +14,6 @@ import type {
   LogEntry,
   LogsResult,
   LogsOptions,
-  RotateResult,
   PlateAPIOptions,
 } from "./types";
 
@@ -281,15 +280,6 @@ export class PlateAPI {
       total: (body.total as number) ?? 0,
       limit: (body.limit as number) ?? 100,
       offset: (body.offset as number) ?? 0,
-    };
-  }
-
-  async rotate(): Promise<RotateResult> {
-    const response = await this.request("POST", "/api/v1/keys/rotate");
-    const body = (await response.json()) as Record<string, unknown>;
-    return {
-      new_key: (body.new_key as string) ?? null,
-      email: (body.email as string) ?? null,
     };
   }
 
