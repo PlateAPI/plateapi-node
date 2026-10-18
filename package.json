@@ -1,12 +1,15 @@
 {
   "name": "plateapi-sdk",
-  "version": "0.1.0",
-  "description": "Node.js/TypeScript SDK for PlateAPI -- Australian vehicle registration plate lookup",
+  "version": "0.2.0",
+  "description": "Node.js/TypeScript SDK for PlateAPI -- Australian vehicle registration plate lookup and vehicle database",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
+    "test": "tsc && node --test test/*.test.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -16,7 +19,9 @@
     "registration",
     "australia",
     "api",
-    "plate-lookup"
+    "plate-lookup",
+    "vehicle-database",
+    "vehicle-id"
   ],
   "author": "WolfStack Solutions <support@plateapi.com.au>",
   "license": "MIT",
